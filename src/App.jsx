@@ -7,18 +7,74 @@ import ManageBuilding from "./pages/ManageBuilding";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import { AuthProvider } from "./context/AuthContext";
+import PrivateRoute from "./components/common/PrivateRoute";
+import PublicRoute from "./components/common/PublicRoute";
+import LoadingScreen from "./components/common/LoadingScreen";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Signin />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/manage-building" element={<ManageBuilding />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/**" element={<NotFound />} />
-    </Routes>
+    <AuthProvider>
+      <LoadingScreen />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <PublicRoute>
+              <Signin />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/manage-building"
+          element={
+            <PrivateRoute>
+              <ManageBuilding />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <PrivateRoute>
+              <About />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <PrivateRoute>
+              <NotFound />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </AuthProvider>
   );
 }
 
